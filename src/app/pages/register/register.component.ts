@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AuthService } from 'src/app/service/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -7,9 +9,43 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RegisterComponent implements OnInit {
 
-  constructor() { }
+  signupoForm!: FormGroup;
+  message: string = '';
+  isProcess: boolean = false;
+  className = 'd-none'
 
-  ngOnInit(): void {
+  constructor(private fb: FormBuilder, private auth: AuthService) {
+    this.signupoForm = this.fb.group({
+      'displayName': ['', Validators.required],
+      'email': ['', Validators.required],
+      'password': ['', Validators.required],
+    })
   }
 
+  ngOnInit(): void {
+
+  }
+  signup() {
+
+
+    const data = this.signupoForm.value;
+    this.auth.signup
+    this.auth.signup(data).subscribe(res => {
+      alert("User Register Succesfull")
+      // this.signupoForm.reset();
+      if (res.Succes) {
+        this.isProcess = false;
+        this.message = "Account Has Been Created!!";
+        this.className = 'alert alert-success'
+      } else {    
+        this.isProcess = false;
+        this.message = res.message;
+        this.className = 'alert alert-danger';
+      }
+    }, err => {
+      this.isProcess = false;
+      this.message = "Server Error !!";
+      this.className = 'alert alert-danger'
+    })
+  }
 }
