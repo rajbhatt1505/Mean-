@@ -26,10 +26,9 @@ export class RegisterComponent implements OnInit {
 
   }
   signup() {
-
-
+    this.isProcess = true;
     const data = this.signupoForm.value;
-    this.auth.signup
+    delete data['confirm']
     this.auth.signup(data).subscribe(res => {
       alert("User Register Succesfull")
       // this.signupoForm.reset();
